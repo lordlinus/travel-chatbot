@@ -2,22 +2,14 @@ import json
 from typing import List
 
 from autogen_core.base import MessageContext
-from autogen_core.components import (
-    DefaultTopicId,
-    RoutedAgent,
-    message_handler,
-    type_subscription,
-)
-from autogen_core.components.models import LLMMessage, SystemMessage, UserMessage
+from autogen_core.components import (DefaultTopicId, RoutedAgent,
+                                     message_handler, type_subscription)
+from autogen_core.components.models import (LLMMessage, SystemMessage,
+                                            UserMessage)
 from autogen_ext.models import AzureOpenAIChatCompletionClient
 
-from ..data_types import (
-    AgentStructuredResponse,
-    DestinationInfo,
-    EndUserMessage,
-    GroupChatMessage,
-    TravelRequest,
-)
+from ..data_types import (AgentStructuredResponse, DestinationInfo,
+                          EndUserMessage, GroupChatMessage, TravelRequest)
 from ..otlp_tracing import logger
 
 

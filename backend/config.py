@@ -3,11 +3,8 @@ import os
 
 from autogen_ext.models import AzureOpenAIChatCompletionClient
 from azure.cosmos.aio import CosmosClient
-from azure.identity.aio import (
-    ClientSecretCredential,
-    DefaultAzureCredential,
-    get_bearer_token_provider,
-)
+from azure.identity.aio import (ClientSecretCredential, DefaultAzureCredential,
+                                get_bearer_token_provider)
 from dotenv import load_dotenv
 
 from .otlp_tracing import logger

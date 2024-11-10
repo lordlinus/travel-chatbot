@@ -1,25 +1,14 @@
 import random
-from typing import Dict, List
+from typing import List
 
 from autogen_core.base import MessageContext
-from autogen_core.components import (
-    DefaultTopicId,
-    RoutedAgent,
-    message_handler,
-    type_subscription,
-)
-from typing_extensions import Annotated
+from autogen_core.components import (DefaultTopicId, RoutedAgent,
+                                     message_handler, type_subscription)
 from autogen_core.components.tools import FunctionTool, Tool
 
-from ..data_types import (
-    AgentResponse,
-    EndUserMessage,
-    GroupChatMessage,
-    HandoffMessage,
-    TravelRequest,
-    FlightBooking,
-    AgentStructuredResponse,
-)
+from ..data_types import (AgentStructuredResponse,
+                          EndUserMessage, FlightBooking, GroupChatMessage,
+                          HandoffMessage, TravelRequest)
 from ..otlp_tracing import logger
 
 

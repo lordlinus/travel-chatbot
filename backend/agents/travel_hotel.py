@@ -1,28 +1,20 @@
 import datetime
 import random
-from typing import Dict, List
+from typing import List
 
 from autogen_core.base import AgentId, MessageContext
-from autogen_core.components import (
-    DefaultTopicId,
-    RoutedAgent,
-    message_handler,
-    type_subscription,
-)
-from autogen_core.components.models import LLMMessage, SystemMessage, UserMessage
+from autogen_core.components import (DefaultTopicId, RoutedAgent,
+                                     message_handler, type_subscription)
+from autogen_core.components.models import (LLMMessage, SystemMessage,
+                                            UserMessage)
 from autogen_core.components.tool_agent import tool_agent_caller_loop
 from autogen_core.components.tools import FunctionTool, Tool
 from autogen_ext.models import AzureOpenAIChatCompletionClient
 from typing_extensions import Annotated
 
-from ..data_types import (
-    AgentStructuredResponse,
-    EndUserMessage,
-    GroupChatMessage,
-    HandoffMessage,
-    TravelRequest,
-    HotelBooking,
-)
+from ..data_types import (AgentStructuredResponse, EndUserMessage,
+                          GroupChatMessage, HandoffMessage, HotelBooking,
+                          TravelRequest)
 from ..otlp_tracing import logger
 
 
@@ -166,14 +158,6 @@ class HotelAgent(RoutedAgent):
         )
         response_content = await self._process_request(message.content, ctx)
         logger.info(f"HotelAgent response: {response_content}")
-
-        simulated_func_call = await create_hotel_booking(
-            city="Singapore",
-            check_in_date=datetime.datetime.now().strftime("%Y-%m-%d"),
-            check_out_date=(
-                datetime.datetime.now() + datetime.timedelta(days=5)
-            ).strftime("%Y-%m-%d"),
-        )
 
         return GroupChatMessage(
             source=self.id.type,

@@ -1,15 +1,15 @@
 from autogen_core.application import SingleThreadedAgentRuntime
-from autogen_core.base import AgentId
 from autogen_core.components import DefaultSubscription
 from autogen_core.components.tool_agent import ToolAgent
+from azure.messaging.webpubsubservice import WebPubSubServiceClient
 from llama_index.core.agent import ReActAgent
 from llama_index.core.memory import ChatSummaryMemoryBuffer
 from llama_index.llms.azure_openai import AzureOpenAI
 from llama_index.tools.wikipedia import WikipediaToolSpec
-from azure.messaging.webpubsubservice import WebPubSubServiceClient
 
 from .agents.ext_agents import LlamaIndexAgent
-from .agents.travel_activities import ActivitiesAgent, get_travel_activity_tools
+from .agents.travel_activities import (ActivitiesAgent,
+                                       get_travel_activity_tools)
 from .agents.travel_car import CarRentalAgent
 from .agents.travel_destination import DestinationAgent
 from .agents.travel_flight import FlightAgent

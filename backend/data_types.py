@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from datetime import date
 from enum import Enum
 from typing import List, Optional, Union
-from datetime import date
+
+from pydantic import BaseModel
 
 # Improvements and suggestions:
 # 1. Add better documentation to each model for clarity and easy onboarding.

@@ -4,13 +4,10 @@ from typing import List
 
 import aiohttp
 from autogen_core.base import AgentId, MessageContext
-from autogen_core.components import (
-    DefaultTopicId,
-    RoutedAgent,
-    message_handler,
-    type_subscription,
-)
-from autogen_core.components.models import LLMMessage, SystemMessage, UserMessage
+from autogen_core.components import (DefaultTopicId, RoutedAgent,
+                                     message_handler, type_subscription)
+from autogen_core.components.models import (LLMMessage, SystemMessage,
+                                            UserMessage)
 from autogen_core.components.tool_agent import tool_agent_caller_loop
 from autogen_core.components.tools import FunctionTool, Tool
 from autogen_ext.models import AzureOpenAIChatCompletionClient
@@ -19,14 +16,8 @@ from tenacity import retry, stop_after_attempt, wait_random_exponential
 from typing_extensions import Annotated
 
 from ..config import Config
-from ..data_types import (
-    Activities,
-    AgentStructuredResponse,
-    EndUserMessage,
-    GroupChatMessage,
-    HandoffMessage,
-    TravelRequest,
-)
+from ..data_types import (Activities, AgentStructuredResponse, EndUserMessage,
+                          GroupChatMessage, HandoffMessage, TravelRequest)
 from ..otlp_tracing import logger
 
 

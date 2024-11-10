@@ -1,13 +1,9 @@
 from typing import List, Optional
 
 from autogen_core.base import MessageContext
-from autogen_core.components import (
-    DefaultTopicId,
-    RoutedAgent,
-    default_subscription,
-    message_handler,
-    type_subscription,
-)
+from autogen_core.components import (DefaultTopicId, RoutedAgent,
+                                     default_subscription, message_handler,
+                                     type_subscription)
 from llama_index.core.agent.runner.base import AgentRunner
 from llama_index.core.base.llms.types import ChatMessage, MessageRole
 from llama_index.core.chat_engine.types import AgentChatResponse
