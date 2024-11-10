@@ -17,19 +17,6 @@ from ..data_types import AgentStructuredResponse, EndUserMessage, Resource
 from ..otlp_tracing import logger
 
 
-# class Message(BaseModel):
-#     """
-#     Represents a message exchanged during the chat.
-
-#     Attributes:
-#         content (str): The textual content of the message.
-#         sources (Optional[List[Resource]]): List of resources associated with the message.
-#     """
-
-#     content: str
-#     sources: Optional[List[Resource]] = None
-
-
 @default_subscription
 @type_subscription("default_agent")
 class LlamaIndexAgent(RoutedAgent):

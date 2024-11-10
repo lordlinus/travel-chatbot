@@ -17,7 +17,6 @@ from .agents.travel_group_chat import GroupChatManager
 from .agents.travel_hotel import HotelAgent, get_hotel_booking_tool
 from .agents.travel_router import SemanticRouterAgent
 from .config import Config
-from .intent import IntentClassifier
 from .otlp_tracing import configure_oltp_tracing, logger
 from .registry import AgentRegistry
 from .session_state import SessionStateManager
@@ -59,8 +58,6 @@ async def initialize_agent_runtime() -> SingleThreadedAgentRuntime:
     global session_state_manager, aoai_model_client
     agent_runtime = SingleThreadedAgentRuntime(tracer_provider=tracer)
 
-    # Initialize IntentClassifier and AgentRegistry
-    intent_classifier = IntentClassifier()
     agent_registry = AgentRegistry()
     travel_activity_tools = get_travel_activity_tools()
     hotel_booking_tool = get_hotel_booking_tool()
@@ -90,7 +87,6 @@ async def initialize_agent_runtime() -> SingleThreadedAgentRuntime:
             name="SemanticRouterAgent",
             model_client=aoai_model_client,
             agent_registry=agent_registry,
-            intent_classifier=intent_classifier,
             session_manager=session_state_manager,
         ),
     )

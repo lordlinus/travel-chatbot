@@ -3,41 +3,67 @@ from enum import Enum
 from typing import List, Optional, Union
 from datetime import date
 
+# Improvements and suggestions:
+# 1. Add better documentation to each model for clarity and easy onboarding.
+# 2. Introduce a BaseAgentMessage for standardizing agent messages.
+# 3. Refactor repetitive fields into common base classes where applicable.
+# 4. Make use of `Union` types to create more generic message classes where possible.
+# 5. Consolidate similar message classes to reduce redundancy.
 
-# Message Protocol Definitions
-class BaseMessage(BaseModel):
+
+# Base class for messages exchanged between agents and users
+class BaseAgentMessage(BaseModel):
     source: str
+    timestamp: Optional[date] = None
 
 
-class EndUserMessage(BaseMessage):
+# Unified User and Agent Message Base Class
+class EndUserMessage(BaseAgentMessage):
     content: str
 
 
-class AgentResponse(BaseMessage):
+class AgentResponse(BaseAgentMessage):
     content: str
 
 
-class GroupChatMessage(BaseMessage):
+class GroupChatMessage(BaseAgentMessage):
+    """
+    Represents a message exchanged during a group chat session.
+
+    Attributes:
+        content (str): The content of the group chat message.
+        group_id (str): Identifier for the group chat session.
+        sender (str): The identifier of the sender.
+        recipients (Optional[List[str]]): Optional list of recipients for the message.
+        message_type (Optional[str]): Type of message, such as 'user', 'system', or 'response'.
+    """
+
     content: str
+    group_id: Optional[str] = ""
+    sender: Optional[str] = ""
+    recipients: Optional[List[str]] = None
+    message_type: Optional[str] = "user"
 
 
-class GroupChatResponse(BaseMessage):
+class GroupChatResponse(BaseAgentMessage):
     content: str
+    message_type: Optional[str] = "response"
 
 
-class RequestToSpeak(BaseMessage):
+class RequestToSpeak(BaseAgentMessage):
     pass
 
 
-class TravelRequest(BaseMessage):
+class TravelRequest(BaseAgentMessage):
     content: str
-    original_task: str
+    original_task: Optional[str] = None
 
 
-class HandoffMessage(BaseMessage):
+class HandoffMessage(BaseAgentMessage):
     content: str
 
 
+# Activities Information Data Model
 class ActivitiesDetail(BaseModel):
     activity_name: str
     activity_type: str
@@ -89,6 +115,7 @@ class HotelBooking(BaseModel):
     booking_reference: str
 
 
+# Car Rental Data Model
 class CarRental(BaseModel):
     rental_city: str
     rental_start_date: str
@@ -99,6 +126,7 @@ class CarRental(BaseModel):
     booking_reference: str
 
 
+# Enum to Define Agent Types
 class AgentEnum(str, Enum):
     FlightBooking = "flight_booking"
     HotelBooking = "hotel_booking"
@@ -109,6 +137,7 @@ class AgentEnum(str, Enum):
     GroupChatManager = "group_chat_manager"
 
 
+# Travel SubTask Model
 class TravelSubTask(BaseModel):
     task_details: str
     assigned_agent: AgentEnum
@@ -133,11 +162,12 @@ class AgentStructuredResponse(BaseModel):
         HotelBooking,
         CarRental,
         Greeter,
-        GroupChatResponse,
+        GroupChatMessage,
     ]
     message: Optional[str] = None  # Additional message or notes from the agent
 
 
+# Resource Node Model
 class Resource(BaseModel):
     """
     Represents a resource node retrieved during chat interactions.

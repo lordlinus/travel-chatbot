@@ -43,11 +43,6 @@ async def simulate_car_rental_booking(
         {"car_type": "Electric", "company": "Tesla Rentals", "price_per_day": 120},
         {"car_type": "Hybrid", "company": "Green Wheels", "price_per_day": 60},
         {"car_type": "Sports Car", "company": "Exotic Rentals", "price_per_day": 200},
-        {"car_type": "Station Wagon", "company": "Family Rentals", "price_per_day": 75},
-        {"car_type": "Van", "company": "Van Rentals Inc.", "price_per_day": 85},
-        {"car_type": "Crossover", "company": "Cross Rentals", "price_per_day": 65},
-        {"car_type": "Coupe", "company": "Luxury Line", "price_per_day": 110},
-        {"car_type": "Hatchback", "company": "City Rentals", "price_per_day": 45},
     ]
 
     selected_car = random.choice(car_options)
@@ -121,7 +116,7 @@ class CarRentalAgent(RoutedAgent):
             AgentStructuredResponse(
                 agent_type=self.id.type,
                 data=response,
-                content=f"Car rented: {response}",
+                message=f"Car rented: {response}",
             ),
             DefaultTopicId(type="user_proxy", source=ctx.topic_id.source),
         )
@@ -148,4 +143,5 @@ class CarRentalAgent(RoutedAgent):
         return GroupChatMessage(
             source=self.id.type,
             content=f"Car rented: {response}",
+
         )

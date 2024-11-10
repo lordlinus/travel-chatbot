@@ -28,6 +28,7 @@ async def simulate_flight_booking(
     destination_city: str = "Paris",
     departure_date: str = "2023-12-20",
     return_date: str = "2023-12-30",
+    number_of_passengers: int = 2,
 ) -> FlightBooking:
     flight_options = [
         {"airline": "Air France", "flight_number": "AF123", "price_per_ticket": 200},
@@ -56,7 +57,7 @@ async def simulate_flight_booking(
         flight_number=selected_flight["flight_number"],
         total_price=total_price,
         booking_reference=booking_reference,
-        number_of_passengers=2,
+        number_of_passengers=number_of_passengers,
     )
 
 
@@ -106,7 +107,8 @@ class FlightAgent(RoutedAgent):
     ) -> GroupChatMessage:
         logger.info(f"FlightAgent received travel request sub-task: {message.content}")
 
+        response = await simulate_flight_booking()
         return GroupChatMessage(
             source=self.id.type,
-            content="Flight booking processed as requested and confirmation will be sent by email",
+            content=f"Flight booking processed: {response}",
         )

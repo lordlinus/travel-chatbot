@@ -58,9 +58,8 @@ class DestinationAgent(RoutedAgent):
                 json.loads(response_content.content)
             )
         except Exception as e:
-            logger.error(f"Failed to parse activities response: {str(e)}")
+            logger.error(f"Failed to parse destination response: {str(e)}")
             destination_info_structured = DestinationInfo()
-            pass
 
         await self.publish_message(
             AgentStructuredResponse(
@@ -93,9 +92,10 @@ class DestinationAgent(RoutedAgent):
                 json.loads(response_content.content)
             )
         except Exception as e:
-            logger.error(f"Failed to parse activities response: {str(e)}")
+            logger.error(f"Failed to parse destination response: {str(e)}")
             destination_info_structured = DestinationInfo()
-            pass
+
         return GroupChatMessage(
-            source=self.id.type, content=destination_info_structured.model_dump_json()
+            source=self.id.type,
+            content=destination_info_structured.model_dump_json(),
         )

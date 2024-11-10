@@ -99,7 +99,7 @@ class AgentRegistry:
             for agent_type, details in agent_details.items()
         )
 
-        logger.info(f"Agent descriptions: {agent_descriptions}")
+        # logger.info(f"Agent descriptions: {agent_descriptions}")
 
         planner_prompt = """
     You are an orchestration agent.
@@ -117,5 +117,5 @@ class AgentRegistry:
             message=message.content,
             history=", ".join(msg.content for msg in history),
         )
-        logger.info(f"Planner prompt output: {planner_prompt}")
+        # logger.info(f"Planner prompt output: {planner_prompt}")
         return planner_prompt

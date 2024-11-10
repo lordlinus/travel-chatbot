@@ -80,7 +80,16 @@ class GroupChatManager(RoutedAgent):
             )
             for task in message.subtasks
         ]
-        group_results: List[GroupChatMessage] = await asyncio.gather(*tasks)
+        try:
+            group_results: List[GroupChatMessage] = await asyncio.gather(*tasks)
+            logger.info("-" * 50)
+            logger.info(
+                f"GroupChatManager received responses from agents: {group_results}"
+            )
+            logger.info("-" * 50)
+        except Exception as e:
+            logger.error(f"Error sending messages to agents: {e}")
+            return
 
         logger.info(f"GroupChatManager received responses from agents: {group_results}")
         # Compile the final travel plan based on agent responses
@@ -90,7 +99,7 @@ class GroupChatManager(RoutedAgent):
             await self.publish_message(
                 AgentStructuredResponse(
                     agent_type=self.id.type,
-                    data=GroupChatResponse(
+                    data=GroupChatMessage(
                         source=self.id.type,
                         content=final_plan,
                     ),
@@ -116,7 +125,7 @@ class GroupChatManager(RoutedAgent):
                 TravelRequest(
                     source="GroupChatManager",
                     content="Provide details for the travel plan",
-                    requirements={"destination_city": "Paris"},
+                    original_task="General travel plan",
                 ),
                 DefaultTopicId(type=agent_type, source=self._session_id),
             )
@@ -133,9 +142,30 @@ class GroupChatManager(RoutedAgent):
         session_id = ctx.topic_id.source
         logger.info(f"Received handoff message from {message.source}")
 
-        if message.complete:
+        if message.original_task and "complete" in message.content.lower():
             self._conversation_complete = True
             logger.info("Conversation completed. Clearing session.")
             # Add cleanup or finalization logic here if needed.
         else:
             await self.compile_final_plan()
+
+    async def compile_final_plan(self) -> None:
+        """
+        Compiles the final travel plan based on collected responses from agents.
+        """
+        logger.info("Compiling final travel plan from collected responses.")
+        final_plan = "\n".join(
+            response.content for response in self._responses[self._session_id]
+        )
+        logger.info(f"Compiled Final Travel Plan: {final_plan}")
+        await self.publish_message(
+            AgentStructuredResponse(
+                agent_type=self.id.type,
+                data=GroupChatResponse(
+                    source=self.id.type,
+                    content=final_plan,
+                ),
+                message=f"Here is your comprehensive travel plan:\n{final_plan}",
+            ),
+            DefaultTopicId(type="user_proxy", source=self._session_id),
+        )

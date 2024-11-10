@@ -45,19 +45,6 @@ async def create_hotel_booking(
         {"hotel_name": "Hyatt", "room_type": "Suite", "price_per_night": 300},
         {"hotel_name": "Sheraton", "room_type": "Executive", "price_per_night": 250},
         {"hotel_name": "Holiday Inn", "room_type": "Standard", "price_per_night": 100},
-        {"hotel_name": "Ritz-Carlton", "room_type": "Luxury", "price_per_night": 400},
-        {
-            "hotel_name": "Four Seasons",
-            "room_type": "Presidential Suite",
-            "price_per_night": 500,
-        },
-        {
-            "hotel_name": "InterContinental",
-            "room_type": "Club Room",
-            "price_per_night": 350,
-        },
-        {"hotel_name": "Westin", "room_type": "Deluxe", "price_per_night": 220},
-        {"hotel_name": "Radisson", "room_type": "Standard", "price_per_night": 180},
     ]
 
     # Randomly select a hotel option
@@ -179,6 +166,14 @@ class HotelAgent(RoutedAgent):
         )
         response_content = await self._process_request(message.content, ctx)
         logger.info(f"HotelAgent response: {response_content}")
+
+        simulated_func_call = await create_hotel_booking(
+            city="Singapore",
+            check_in_date=datetime.datetime.now().strftime("%Y-%m-%d"),
+            check_out_date=(
+                datetime.datetime.now() + datetime.timedelta(days=5)
+            ).strftime("%Y-%m-%d"),
+        )
 
         return GroupChatMessage(
             source=self.id.type,

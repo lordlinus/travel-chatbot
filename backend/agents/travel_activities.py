@@ -21,12 +21,11 @@ from typing_extensions import Annotated
 from ..config import Config
 from ..data_types import (
     Activities,
-    AgentResponse,
+    AgentStructuredResponse,
     EndUserMessage,
     GroupChatMessage,
     HandoffMessage,
     TravelRequest,
-    AgentStructuredResponse,
 )
 from ..otlp_tracing import logger
 

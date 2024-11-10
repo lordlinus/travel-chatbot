@@ -18,11 +18,9 @@ from ..data_types import (
     AgentStructuredResponse,
     Greeter,
 )
-from ..intent import IntentClassifier
 from ..otlp_tracing import logger
 from ..registry import AgentRegistry
 from ..session_state import SessionStateManager
-from ..registry import AgentRegistry
 
 agent_registry = AgentRegistry()
 
@@ -45,14 +43,12 @@ class SemanticRouterAgent(RoutedAgent):
         name: str,
         model_client: AzureOpenAIChatCompletionClient,
         agent_registry: AgentRegistry,
-        intent_classifier: IntentClassifier,
         session_manager: SessionStateManager,
     ) -> None:
         super().__init__("SemanticRouterAgent")
         self._name = name
         self._model_client = model_client
         self._registry = agent_registry
-        self._classifier = intent_classifier
         self._session_manager = session_manager
 
     @message_handler
@@ -127,7 +123,7 @@ class SemanticRouterAgent(RoutedAgent):
         logger.info(f"Received handoff message from {message.source}")
 
         # Clear session if conversation is complete, otherwise continue routing
-        if message.complete:
+        if message.original_task and "complete" in message.content.lower():
             self._session_manager.clear_session(session_id)
         else:
             await self.route_message(
@@ -156,31 +152,10 @@ class SemanticRouterAgent(RoutedAgent):
             system_message = agent_registry.get_planner_prompt(
                 message=message, history=history
             )
-            logger.info(f"System message: {system_message}")
+            # logger.info(f"System message: {system_message}")
         except Exception as e:
             logger.error(e)
-        # system_message = f"""
-        #     You are an orchestration agent.
-        #     Your job is to decide which agents to run based on the user's request and the conversation history.
-        #     Below are the available agents:
 
-        #     * hotel_booking - Helps in booking hotels. Available functions
-        #     * activities_booking - Helps in providing activities information.
-        #     * flight_booking - Helps in providing flight information.
-        #     * car_rental - Helps in booking car rentals.
-        #     * group_chat_manager - Coordinates messages between agents to create a travel plan.
-        #     * destination_info - Provides information about a destination city.
-        #     * default_agent - Handles any other requests that do not match the above agents, including greetings and general queries.
-
-        #     The current user message: {message.content}
-        #     Conversation history so far: {[msg.content for msg in history]}
-
-        #     Note:
-        #     - If the user's message is a greeting or a general query, assign it to `default_agent`.
-        #     - For other requests, analyze and break down the user's message into appropriate subtasks.
-        #     - Assign each subtask to the relevant agent by setting `assigned_agent`.
-        #     - Ensure that `assigned_agent` is not blank.
-        # """
         try:
             response = await self._model_client.create(
                 [SystemMessage(system_message)],

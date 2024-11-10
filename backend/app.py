@@ -24,9 +24,6 @@ from backend.data_types import AgentResponse, EndUserMessage, AgentStructuredRes
 from backend.otlp_tracing import logger
 from backend.utils import initialize_agent_runtime, get_web_pub_client
 
-from azure.messaging.webpubsubservice import WebPubSubServiceClient
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -115,11 +112,6 @@ class WebSocketConnectionManager:
                     user_message,
                     DefaultTopicId(type="user_proxy", source=session_id),
                 )
-                # Send message to WebPubSub
-                web_pubsub_client.send_to_all(
-                    content_type="application/json",
-                    message={"from": session_id, "message": user_message_text},
-                )
                 await asyncio.sleep(0.1)
         except WebSocketDisconnect:
             logger.info(f"WebSocket connection closed: {session_id}")
@@ -132,35 +124,6 @@ class WebSocketConnectionManager:
                     await websocket.close()
             except WebSocketDisconnect:
                 logger.info(f"WebSocket already closed: {session_id}")
-
-
-# Default Agent
-# @default_subscription
-# class DefaultAgent(RoutedAgent):
-#     """
-#     Handles messages that do not match any specific intent.
-#     """
-
-#     def __init__(self) -> None:
-#         super().__init__("DefaultAgent")
-
-#     @message_handler
-#     async def handle_unknown_intent(
-#         self, message: EndUserMessage, ctx: MessageContext
-#     ) -> None:
-#         """
-#         Handles messages with unknown intent by providing a default response.
-
-#         Args:
-#             message (EndUserMessage): The user's message.
-#             ctx (MessageContext): The message context.
-#         """
-#         logger.info(f"DefaultAgent received message: {message.content}")
-#         content = "I'm sorry, I couldn't understand your request. Could you please provide more details?"
-#         await self.publish_message(
-#             AgentResponse(source="DefaultAgent", content=content),
-#             DefaultTopicId(type="user_proxy", source=ctx.topic_id.source),
-#         )
 
 
 # User Proxy Agent
@@ -183,7 +146,7 @@ class UserProxyAgent(RoutedAgent):
         Sends the agent's response back to the user via WebSocket.
 
         Args:
-            message (AgentResponse): The agent's response message.
+            message (AgentStructuredResponse): The agent's response message.
             ctx (MessageContext): The message context.
         """
         logger.info(f"UserProxyAgent received agent response: {message}")
