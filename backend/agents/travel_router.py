@@ -2,22 +2,13 @@ import json
 from collections import deque
 
 from autogen_core.base import MessageContext
-from autogen_core.components import (
-    DefaultTopicId,
-    RoutedAgent,
-    message_handler,
-    type_subscription,
-)
+from autogen_core.components import (DefaultTopicId, RoutedAgent,
+                                     message_handler, type_subscription)
 from autogen_core.components.models import SystemMessage
 from autogen_ext.models import AzureOpenAIChatCompletionClient
 
-from ..data_types import (
-    EndUserMessage,
-    HandoffMessage,
-    TravelPlan,
-    AgentStructuredResponse,
-    Greeter,
-)
+from ..data_types import (AgentStructuredResponse, EndUserMessage, Greeter,
+                          HandoffMessage, TravelPlan)
 from ..otlp_tracing import logger
 from ..registry import AgentRegistry
 from ..session_state import SessionStateManager
@@ -78,7 +69,7 @@ class SemanticRouterAgent(RoutedAgent):
                 AgentStructuredResponse(
                     agent_type="default_agent",
                     data=Greeter(
-                        greeting=f"Greetings, Adventurer! 🌍 Ready to embark on your next journey? I'm here to turn your travel dreams into reality. Let's dive into the details and craft an unforgettable adventure together. From flights to sights, I've got you covered. Let's get started!"
+                        greeting="Greetings, Adventurer! 🌍 Ready to embark on your next journey? I'm here to turn your travel dreams into reality. Let's dive into the details and craft an unforgettable adventure together. From flights to sights, I've got you covered. Let's get started!"
                     ),
                     message=f"User greeting detected: {message.content}",
                 ),

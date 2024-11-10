@@ -1,11 +1,12 @@
-from typing import Optional, List, Dict, Any
-from .otlp_tracing import logger
+from typing import Any, Dict, List, Optional
+
+from backend.agents.travel_activities import get_travel_activity_tools
+from backend.agents.travel_car import get_car_rental_tool
 from backend.agents.travel_flight import get_flight_booking_tool
 from backend.agents.travel_hotel import get_hotel_booking_tool
-from backend.agents.travel_car import get_car_rental_tool
-from backend.agents.travel_activities import get_travel_activity_tools
-
 from backend.data_types import EndUserMessage
+
+from .otlp_tracing import logger
 
 
 class AgentRegistry:

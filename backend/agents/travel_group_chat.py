@@ -3,21 +3,12 @@ from collections import defaultdict
 from typing import List
 
 from autogen_core.base import AgentId, MessageContext
-from autogen_core.components import (
-    DefaultTopicId,
-    RoutedAgent,
-    message_handler,
-    type_subscription,
-)
+from autogen_core.components import (DefaultTopicId, RoutedAgent,
+                                     message_handler, type_subscription)
 
-from ..data_types import (
-    AgentStructuredResponse,
-    EndUserMessage,
-    GroupChatMessage,
-    TravelPlan,
-    TravelRequest,
-    GroupChatResponse,
-)
+from ..data_types import (AgentStructuredResponse, EndUserMessage,
+                          GroupChatMessage, GroupChatResponse, TravelPlan,
+                          TravelRequest)
 from ..otlp_tracing import logger
 
 
@@ -139,7 +130,6 @@ class GroupChatManager(RoutedAgent):
             message (TravelRequest): The handoff message from another agent.
             ctx (MessageContext): Context information for the message.
         """
-        session_id = ctx.topic_id.source
         logger.info(f"Received handoff message from {message.source}")
 
         if message.original_task and "complete" in message.content.lower():
