@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Icon from "@/components/ui/icon";
-import LogoImg from "@/app/assets/logo.svg";
-import BotImg from "@/app/assets/bot.png";
+import LogoImg from "@/app/assets/agoda/logo.svg";
+import BotImg from "@/app/assets/agoda/bot.png";
 
 type Message = {
   id: number;

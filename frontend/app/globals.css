@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("theme-capitaland.css");
+@import url("assets/agoda/theme.css");
 @import url("boxicons/css/boxicons.min.css");
 
 @layer base {
